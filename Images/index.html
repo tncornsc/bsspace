@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Image Viewer</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #111;
+      color: #eee;
+      text-align: center;
+      padding: 2rem;
+    }
+    img {
+      max-width: 90%;
+      max-height: 80vh;
+      border: 2px solid #444;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Image Viewer</h1>
+  <div id="content">Loading...</div>
+
+  <script>
+    function loadFile() {
+      const hash = window.location.hash.substring(1); // remove the #
+      const content = document.getElementById("content");
+
+      if (!hash) {
+        content.innerHTML = "<p>No file specified.<br>Use #filename.ext in the URL.</p>";
+        return;
+      }
+
+      // Try to display as an image
+      const img = document.createElement("img");
+      img.src = hash;
+      img.alt = hash;
+
+      // If image fails, show a download link instead
+      img.onerror = () => {
+        content.innerHTML = `<p>File not found or not an image.<br>
+          <a href="${hash}" download>Download ${hash}</a></p>`;
+      };
+
+      content.innerHTML = "";
+      content.appendChild(img);
+    }
+
+    // Run on page load and whenever the hash changes
+    window.addEventListener("hashchange", loadFile);
+    window.addEventListener("DOMContentLoaded", loadFile);
+  </script>
+</body>
+</html>
